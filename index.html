@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Bootstrap Example</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
+    <script>
+
+        var respuesta = '';
+
+        function Get(){
+            var search = document.getElementById('game').value
+            var Httpreq = new XMLHttpRequest(); // a new request
+            Httpreq.open("GET",'https://www.cheapshark.com/api/1.0/games?title='+search,false);
+            Httpreq.send(null);
+            //document.getElementById("demo").innerHTML 
+            respuesta = JSON.parse(Httpreq.responseText);
+            var htmlElements = "<table class='table table-hover'><tbody>";
+            for (var i = 0; i < respuesta.length; i++) {
+                htmlElements += "<tr><td><img width='90' height='40' src='" + respuesta[i].thumb + "'><td>";
+                htmlElements += "<td>" + respuesta[i].external + "<td>";
+                htmlElements += "<td>" + respuesta[i].cheapest + "$<td>";
+                htmlElements += "<td><a role='button' class='btn btn-default' href='https://www.cheapshark.com/redirect?dealID=" + respuesta[i].cheapestDealID + "'>Game</a><td>";
+                htmlElements += "</tr>";
+            }
+            htmlElements += "</tbody></table>"
+            document.getElementById("demo").innerHTML = htmlElements;
+        }
+    </script>
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <div class="navbar-brand">
+                        Game deals 
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <div class="jumbotron">
+                <div class="media">
+                    <div class="media-left">
+                         <img src="http://www.cheapshark.com/img/logo_image.png" class="media-object" style="width:120px">
+                    </div>
+                    <div class="media-body">
+                        <h2 class="media-heading">Game deal searcher</h2>
+                        <b>Code:</b> <a href="https://www.cheapshark.com/">Github</a><br>
+                        <b>Powered by:</b> <a href="https://www.cheapshark.com/">Cheapshark</a><br>
+                        <b>API:</b> <a href="https://apidocs.cheapshark.com/?version=latest">Cheapshark API</a><br>
+                        <b>Web made by:</b> Guillermo C.A
+                    </div>
+                </div>
+            </div>
+            <div class="alert alert-info alert-dismissible">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>Important:</strong>
+                Prices and offers vary depending on the region/country so it may or may not be an offer. 
+            </div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <form class="form-inline">
+                        <div class="form-group">
+                            <label for="game">Search games:</label>
+                            <input type="text" class="form-control" id="game">
+                        </div>
+                    </form>
+                </div>
+                <div class="col-sm-6">
+                    <button class="btn btn-default" onclick="Get();">Search</button>
+                </div>
+            </div>
+            <p id="demo"></p>
+        </div>
+
+    </body>
+</html>
