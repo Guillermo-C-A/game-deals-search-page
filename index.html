@@ -4,27 +4,24 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
     <script>
-
-        var respuesta = '';
-
-        function Get(){
-            var search = document.getElementById('game').value
-            var Httpreq = new XMLHttpRequest(); // a new request
-            Httpreq.open("GET",'https://www.cheapshark.com/api/1.0/games?title='+search,false);
+        function requestGame(){
+            const Httpreq = new XMLHttpRequest(); // a new request
+            Httpreq.open("GET",'https://www.cheapshark.com/api/1.0/games?title=' + document.getElementById('game').value, false);
             Httpreq.send(null);
-            //document.getElementById("demo").innerHTML 
-            respuesta = JSON.parse(Httpreq.responseText);
-            var htmlElements = "<table class='table table-hover'><tbody>";
-            for (var i = 0; i < respuesta.length; i++) {
-                htmlElements += "<tr><td><img width='90' height='40' src='" + respuesta[i].thumb + "'><td>";
-                htmlElements += "<td>" + respuesta[i].external + "<td>";
-                htmlElements += "<td>" + respuesta[i].cheapest + "$<td>";
-                htmlElements += "<td><a role='button' class='btn btn-default' href='https://www.cheapshark.com/redirect?dealID=" + respuesta[i].cheapestDealID + "'>Game</a><td>";
-                htmlElements += "</tr>";
+
+            const response = JSON.parse(Httpreq.responseText);
+            const length = response.length;
+
+            let htmlElements = "<table class='table table-hover'><tbody>";
+            for (let i = 0; i < length; i++) {
+                htmlElements += "<tr><td><img width='90' height='40' src='" + response[i].thumb + "'><td>";
+                htmlElements += "<td>" + response[i].external + "<td>";
+                htmlElements += "<td>" + response[i].cheapest + "$<td>";
+                htmlElements += "<td><a role='button' class='btn btn-default' href='https://www.cheapshark.com/redirect?dealID=" 
+                        + response[i].cheapestDealID 
+                        + "'>Game</a><td></tr>";
             }
             htmlElements += "</tbody></table>"
             document.getElementById("demo").innerHTML = htmlElements;
@@ -71,7 +68,7 @@
                     </form>
                 </div>
                 <div class="col-sm-6">
-                    <button class="btn btn-default" onclick="Get();">Search</button>
+                    <button class="btn btn-default" onclick="requestGame();">Search</button>
                 </div>
             </div>
             <p id="demo"></p>
